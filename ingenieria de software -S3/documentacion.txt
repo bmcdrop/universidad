@@ -1,0 +1,4 @@
+Sommerville, I., 2011. Ingeniería De Software. México, D. F.: Pearson.
+Priolo, S., 2009. Métodos Ágiles: Una Alternativa Real Y Competitiva A Los Ciclos de Vida clásicos De Desarrollo. Buenos Aires: Gradi.
+Stevens, P., 2002. Utilización De UML En Ingeniería Del Software Con Objetos y Componentes. Madrid: Addison-Wesley.
+Fontela, C. UML, modelado de software para profesionales. Edit. Alfaomega.
