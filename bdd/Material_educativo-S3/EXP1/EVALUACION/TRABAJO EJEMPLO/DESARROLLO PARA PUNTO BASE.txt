@@ -1,0 +1,95 @@
+VAR B_BONO_IMG NUMBER;
+VAR B_BONO_COL NUMBER;
+VAR B_BONO_MOV NUMBER;
+VAR B_MES NUMBER;
+VAR B_ANO NUMBER;
+EXEC    :B_BONO_IMG:=20000;
+EXEC    :B_BONO_COL:=50000;
+EXEC    :B_BONO_MOV:=40000;
+EXEC    :B_MES:=7;
+EXEC    :B_ANO:=2017;
+
+DECLARE
+    V_MAX_EMP NUMBER;
+    V_RUT_PROF VARCHAR(10);
+    V_SUELDO_BASE profesional.sueldo_base%TYPE;
+    V_ASESORIAS NUMBER;
+    V_CONTADOR NUMBER:=1;
+    V_PORC_ASES NUMBER;
+    V_BONO_ASES NUMBER;
+    V_BONO_PROFESION NUMBER;
+    V_ASIGNACION NUMBER;
+    V_ASIGN_SEC NUMBER;
+    V_BONO_INC NUMBER;
+    V_SUM_SUYBO NUMBER;
+    V_MONT_LIQ NUMBER;
+   
+    
+
+BEGIN
+
+    
+    SELECT COUNT(rutprof)
+    INTO V_MAX_EMP
+    FROM PROFESIONAL;
+    
+    WHILE V_CONTADOR <= V_MAX_EMP LOOP
+    
+    SELECT SUELDO_BASE,rutprof
+    INTO v_sueldo_base,v_rut_prof
+    FROM profesional
+    WHERE idprofesional=v_contador;
+    
+    SELECT COUNT(PRO.rutprof)
+    INTO v_asesorias
+    FROM asesoria ASE JOIN profesional PRO
+    ON(pro.rutprof = ase.rutprof)
+    WHERE ase.inicio BETWEEN '01/07/2017' AND '31/07/2017' 
+    AND pro.idprofesional=v_contador
+    GROUP BY PRO.rutprof;
+    dbms_output.put_line(v_asesorias);
+    
+    SELECT PORC_BONIF_ASE
+    INTO v_porc_ases
+    FROM porc_asesorias
+    WHERE v_asesorias BETWEEN cant_inf AND cant_sup;
+    v_bono_ases:=(v_sueldo_base*v_porc_ases/100);
+    dbms_output.put_line(v_porc_ases);
+    DBMS_OUTPUT.PUT_LINE(v_bono_ases);
+    
+
+    SELECT PROF.asignacion
+    INTO v_ASIGNACION
+    FROM profesion PROF JOIN profesional PRO ON(prof.idprofesion=PRO.IDPROFESION)
+    WHERE pro.idprofesional=v_contador;
+    v_bono_profesion:=(v_sueldo_base*v_asignacion/100);
+    DBMS_OUTPUT.PUT_LINE(v_bono_profesion);
+    
+
+    SELECT SUM(sec.incentivo_sector*COUNT(PRO.RUTPROF))
+    INTO v_asign_sec
+    FROM PROFESIONAL PRO JOIN asesoria ASES ON(pro.rutprof=ases.rutprof)
+    JOIN EMPRESA EMP ON(ases.idempresa=emp.idempresa)JOIN sector SEC ON(emp.codsector=sec.codsector)
+    WHERE ases.inicio BETWEEN '01/07/2017'AND'31/07/2017' AND pro.idprofesional=v_contador
+    GROUP BY pro.rutprof,emp.codsector,sec.incentivo_sector
+    ORDER BY pro.rutprof ASC, emp.codsector ASC;
+    v_bono_inc:=(v_sueldo_base*v_asign_sec/100);
+    DBMS_OUTPUT.PUT_LINE(v_bono_inc);
+    
+    v_sum_suybo:=((V_SUELDO_BASE+:B_BONO_IMG+V_BONO_ASES+V_BONO_PROFESION+V_BONO_INC)*0.07);
+    
+    V_MONT_LIQ:=(V_SUELDO_BASE+:B_BONO_IMG+V_BONO_ASES+V_BONO_PROFESION+V_BONO_INC+:B_BONO_COL+:B_BONO_MOV)-(v_sum_suybo);
+    
+    
+    INSERT INTO remuneracion_mensual
+    VALUES(v_rut_prof,:B_MES,:B_ANO,v_sueldo_base,:B_BONO_IMG,V_BONO_ASES,:B_BONO_COL,
+    :B_BONO_MOV,v_bono_profesion,v_bono_inc,00,v_sum_suybo,v_mont_liq);
+    
+    
+    
+    V_CONTADOR:=V_CONTADOR+1;
+     END LOOP;
+END;
+
+
+

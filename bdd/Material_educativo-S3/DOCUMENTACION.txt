@@ -1,0 +1,17 @@
+· Database PL/SQL Language Reference. (s. f.). Oracle Help Center. https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/index.html
+
+· SQL Developer Data Modeler User’s Guide - Contents. (2021). Oracle. Recuperado 11 de diciembre de 2021, de https://docs.oracle.com/cd/E39885_01/doc.40/e48205/toc.htm
+
+· SQL Developer User’s Guide - Contents. (2021). Oracle. Recuperado 11 de diciembre de 2021, de https://docs.oracle.com/cd/E39885_01/appdev.40/e38414/toc.htm
+
+· Oracle XE 18c (s. f.-e). Oracle. Recuperado 11 de diciembre de 2021, de
+
+https://www.oracle.com/database/technologies/xe-downloads.html
+
+· Oracle SQL Developer Downloads. (s. f.). Oracle. Recuperado 11 de diciembre de 2021, de
+
+https://www.oracle.com/tools/downloads/sqldev-downloads.html
+
+· SQL Developer Data Modeler. (s. f.-f). Oracle. Recuperado 11 de diciembre de 2021, de
+
+https://www.oracle.com/tools/downloads/sql-data-modeler-downloads.html
